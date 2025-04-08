@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Administración - TasDrives</title>
+    <link rel="stylesheet" href="styles/normalize.css">
+    <link rel="stylesheet" href="styles/main.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="favicon.ico">
+    <style>
+        /* Estilos específicos para el panel de administración */
+        .admin-container {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            min-height: calc(100vh - 120px);
+        }
+        
+        .admin-sidebar {
+            background-color: var(--secondary-color);
+            color: white;
+            padding: 2rem 1rem;
+        }
+        
+        .admin-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        
+        .admin-nav a {
+            padding: 0.75rem 1rem;
+            border-radius: 4px;
+            transition: var(--transition);
+        }
+        
+        .admin-nav a:hover,
+        .admin-nav a.active {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        .admin-content {
+            padding: 2rem;
+        }
+        
+        .admin-section {
+            display: none;
+        }
+        
+        .admin-section.active {
+            display: block;
+        }
+        
+        .admin-header {
+            margin-bottom: 2rem;
+        }
+        
+        .admin-header h1 {
+            margin-bottom: 0.5rem;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            padding: 1.5rem;
+            text-align: center;
+        }
+        
+        .stat-card h3 {
+            margin-bottom: 0.5rem;
+            color: var(--accent-color);
+        }
+        
+        .stat-card .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+        
+        .admin-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 2rem;
+        }
+        
+        .admin-table th,
+        .admin-table td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .admin-table th {
+            background-color: var(--light-color);
+            font-weight: 600;
+        }
+        
+        .admin-form {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            padding: 2rem;
+            max-width: 800px;
+        }
+        
+        .admin-form h2 {
+            margin-bottom: 1.5rem;
+        }
+        
+        .admin-form .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .btn-edit,
+        .btn-delete {
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+            margin-right: 0.5rem;
+        }
+        
+        .btn-edit {
+            background-color: var(--accent-color);
+            color: white;
+        }
+        
+        .btn-delete {
+            background-color: var(--primary-color);
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <!-- Top WIX Studio Banner -->
+    <div class="wix-banner">
+        Creado con WIX STUDIO
+    </div>
+
+    <!-- Dark Info Bar -->
+    <div class="info-bar">
+        TasDrives empresa de compra y venta de autos. Customización tuning.
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-links">
+            <a href="index.html">Inicio</a>
+            <a href="tienda.html">Tienda</a>
+            <a href="sobre.html">Sobre</a>
+            <a href="contacto.html">Contacto</a>
+        </div>
+        
+        <div class="logo">TasDrives</div>
+        
+        <div class="nav-icons">
+            <a href="login.html" class="icon-button">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                <span class="sr-only">Entrar</span>
+            </a>
+            <a href="#" class="icon-button" id="cart-button">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon"><circle cx="8" cy="21" r="1"></circle><circle cx="19" cy="21" r="1"></circle><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"></path></svg>
+                <span class="sr-only">Carrito</span>
+            </a>
+        </div>
+    </nav>
+
+    <!-- Admin Panel -->
+    <div class="admin-container">
+        <!-- Sidebar -->
+        <div class="admin-sidebar">
+            <div class="admin-nav">
+                <a href="#dashboard" class="active">Dashboard</a>
+                <a href="#inventory">Inventario</a>
+                <a href="#sales">Ventas</a>
+                <a href="#clients">Clientes</a>
+                <a href="#users">Usuarios</a>
+                <a href="#settings">Configuración</a>
+                <a href="index.html">Salir</a>
+            </div>
+        </div>
+        
+        <!-- Content -->
+        <div class="admin-content">
+            <!-- Dashboard Section -->
+            <div id="dashboard" class="admin-section active">
+                <div class="admin-header">
+                    <h1>Dashboard</h1>
+                    <p>Bienvenido al panel de administración de TasDrives</p>
+                </div>
+                
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h3>Total de Ventas</h3>
+                        <div class="stat-value" id="total-sales">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Ingresos Totales</h3>
+                        <div class="stat-value" id="total-revenue">$0.00</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Autos en Inventario</h3>
+                        <div class="stat-value" id="total-cars">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Clientes Registrados</h3>
+                        <div class="stat-value" id="total-clients">0</div>
+                    </div>
+                </div>
+                
+                <h2>Ventas Recientes</h2>
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Cliente</th>
+                            <th>Auto</th>
+                            <th>Fecha</th>
+                            <th>Total</th>
+                            <th>Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>Juan Pérez</td>
+                            <td>BMW Serie 3</td>
+                            <td>15/04/2024</td>
+                            <td>$45,000</td>
+                            <td>Completada</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>María López</td>
+                            <td>Audi A4</td>
+                            <td>12/04/2024</td>
+                            <td>$48,500</td>
+                            <td>Completada</td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td>Carlos Rodríguez</td>
+                            <td>Mercedes-Benz Clase C</td>
+                            <td>10/04/2024</td>
+                            <td>$52,000</td>
+                            <td>Pendiente</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- Inventory Section -->
+            <div id="inventory" class="admin-section">
+                <div class="admin-header">
+                    <h1>Gestión de Inventario</h1>
+                    <p>Administra el inventario de autos</p>
+                </div>
+                
+                <div class="admin-form">
+                    <h2>Agregar Nuevo Auto</h2>
+                    <form id="inventory-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="car-brand">Marca</label>
+                                <input type="text" id="car-brand" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="car-model">Modelo</label>
+                                <input type="text" id="car-model" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="car-year">Año</label>
+                                <input type="number" id="car-year" min="1900" max="2030" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="car-price">Precio</label>
+                                <input type="number" id="car-price" min="0" step="0.01" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="car-stock">Stock</label>
+                                <input type="number" id="car-stock" min="0" required>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Agregar Auto</button>
+                    </form>
+                </div>
+                
+                <h2>Inventario Actual</h2>
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Marca</th>
+                            <th>Modelo</th>
+                            <th>Año</th>
+                            <th>Precio</th>
+                            <th>Stock</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="cars-list">
+                        <!-- Se llenará dinámicamente con JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- Sales Section -->
+            <div id="sales" class="admin-section">
+                <div class="admin-header">
+                    <h1>Gestión de Ventas</h1>
+                    <p>Administra las ventas realizadas</p>
+                </div>
+                
+                <div class="admin-form">
+                    <h2>Registrar Nueva Venta</h2>
+                    <form id="sales-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="sale-client">Cliente</label>
+                                <select id="sale-client" required>
+                                    <option value="">Seleccionar cliente</option>
+                                    <option value="1">Juan Pérez</option>
+                                    <option value="2">María López</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="sale-car">Auto</label>
+                                <select id="sale-car" required>
+                                    <option value="">Seleccionar auto</option>
+                                    <option value="1">BMW Serie 3</option>
+                                    <option value="2">Mercedes-Benz Clase C</option>
+                                    <option value="3">Audi A4</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="sale-quantity">Cantidad</label>
+                                <input type="number" id="sale-quantity" min="1" value="1" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="sale-price">Precio</label>
+                                <input type="number" id="sale-price" min="0" step="0.01" required>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Registrar Venta</button>
+                    </form>
+                </div>
+                
+                <h2>Ventas Realizadas</h2>
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Cliente</th>
+                            <th>Auto</th>
+                            <th>Cantidad</th>
+                            <th>Total</th>
+                            <th>Fecha</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="sales-list">
+                        <!-- Se llenará dinámicamente con JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- Clients Section -->
+            <div id="clients" class="admin-section">
+                <div class="admin-header">
+                    <h1>Gestión de Clientes</h1>
+                    <p>Administra los clientes registrados</p>
+                </div>
+                
+                <div class="admin-form">
+                    <h2>Agregar Nuevo Cliente</h2>
+                    <form id="client-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="client-name">Nombre</label>
+                                <input type="text" id="client-name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="client-phone">Teléfono</label>
+                                <input type="tel" id="client-phone" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="client-email">Email</label>
+                                <input type="email" id="client-email" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="client-address">Dirección</label>
+                                <input type="text" id="client-address">
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Agregar Cliente</button>
+                    </form>
+                </div>
+                
+                <h2>Clientes Registrados</h2>
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nombre</th>
+                            <th>Teléfono</th>
+                            <th>Email</th>
+                            <th>Dirección</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="clients-list">
+                        <!-- Se llenará dinámicamente con JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- Users Section -->
+            <div id="users" class="admin-section">
+                <div class="admin-header">
+                    <h1>Gestión de Usuarios</h1>
+                    <p>Administra los usuarios del sistema</p>
+                </div>
+                
+                <div class="admin-form">
+                    <h2>Agregar Nuevo Usuario</h2>
+                    <form id="user-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="user-name">Nombre</label>
+                                <input type="text" id="user-name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="user-email">Email</label>
+                                <input type="email" id="user-email" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="user-password">Contraseña</label>
+                                <input type="password" id="user-password" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="user-role">Rol</label>
+                                <select id="user-role" required>
+                                    <option value="admin">Administrador</option>
+                                    <option value="vendedor">Vendedor</option>
+                                </select>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Agregar Usuario</button>
+                    </form>
+                </div>
+                
+                <h2>Usuarios Registrados</h2>
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nombre</th>
+                            <th>Email</th>
+                            <th>Rol</th>
+                            <th>Fecha de Creación</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="users-list">
+                        <!-- Se llenará dinámicamente con JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- Settings Section -->
+            <div id="settings" class="admin-section">
+                <div class="admin-header">
+                    <h1>Configuración</h1>
+                    <p>Configura los parámetros del sistema</p>
+                </div>
+                
+                <div class="admin-form">
+                    <h2>Configuración General</h2>
+                    <form id="settings-form">
+                        <div class="form-group">
+                            <label for="site-name">Nombre del Sitio</label>
+                            <input type="text" id="site-name" value="TasDrives">
+                        </div>
+                        <div class="form-group">
+                            <label for="site-description">Descripción</label>
+                            <textarea id="site-description" rows="3">Empresa de compra y venta de autos. Customización tuning.</textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="contact-email">Email de Contacto</label>
+                            <input type="email" id="contact-email" value="info@tasdrives.com">
+                        </div>
+                        <div class="form-group">
+                            <label for="contact-phone">Teléfono de Contacto</label>
+                            <input type="tel" id="contact-phone" value="(123) 456-7890">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Guardar Configuración</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content container">
+            <div class="footer-section">
+                <h3>TasDrives</h3>
+                <p>Empresa de compra y venta de autos. Especialistas en customización tuning.</p>
+            </div>
+            <div class="footer-section">
+                <h3>Enlaces</h3>
+                <ul class="footer-links">
+                    <li><a href="index.html">Inicio</a></li>
+                    <li><a href="tienda.html">Tienda</a></li>
+                    <li><a href="sobre.html">Sobre nosotros</a></li>
+                    <li><a href="contacto.html">Contacto</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Contacto</h3>
+                <address>
+                    <p>Calle Principal 123</p>
+                    <p>Ciudad, CP 12345</p>
+                    <p class="mt-2">Email: <a href="mailto:info@tasdrives.com">info@tasdrives.com</a></p>
+                    <p>Teléfono: (123) 456-7890</p>
+                </address>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2024 TasDrives. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <script src="scripts/main.js"></script>
+    <script src="scripts/db-connection.js"></script>
+    <script src="scripts/admin.js"></script>
+</body>
+</html>
+
