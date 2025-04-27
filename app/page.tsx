@@ -1,101 +1,272 @@
-import Image from "next/image";
+"use client"
+
+import { useState, useEffect } from "react"
+import Image from "next/image"
+import Link from "next/link"
+import { Button } from "@/components/ui/button"
+import ProductCard from "@/components/product-card"
+import { ArrowRight, Star, PenTool, Car, Shield } from 'lucide-react'
+import { motion } from "framer-motion"
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+  const [currentSlide, setCurrentSlide] = useState(0)
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+  const featuredCars = [
+    {
+      id: 1,
+      name: "BMW Serie 3",
+      year: 2023,
+      km: 15000,
+      price: 45000,
+      isBestSeller: true,
+      image: "/bmw-serie3.jpg"
+    },
+    {
+      id: 2,
+      name: "Mercedes-Benz Clase C",
+      year: 2022,
+      km: 20000,
+      price: 52000,
+      isBestSeller: false,
+      image: "/mercedes-clasec.jpg"
+    },
+    {
+      id: 3,
+      name: "Audi A4",
+      year: 2023,
+      km: 10000,
+      price: 48500,
+      isBestSeller: false,
+      image: "/audi-a4.jpg"
+    },
+  ]
+
+  // Implementación de carrusel usando React state
+  useEffect(() => {
+    if (featuredCars.length <= 1) return
+
+    const timer = setTimeout(() => {
+      setCurrentSlide((prev) => (prev + 1) % featuredCars.length)
+    }, 5000)
+
+    return () => clearTimeout(timer)
+  }, [currentSlide, featuredCars.length])
+
+  return (
+    <>
+      {/* Hero Section - Pantalla completa como en el mockup */}
+      <div className="relative h-screen w-full overflow-hidden">
+        <Image 
+          src="/hero-car.jpg" 
+          alt="BMW negro" 
+          fill 
+          className="object-cover" 
+          priority 
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/30 to-black/50 flex flex-col items-center justify-center text-center px-4">
+          <motion.h1 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            className="text-5xl md:text-6xl font-bold text-white max-w-4xl mb-6"
           >
-            <Image
-              className="dark:invert"
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+            Encuentra el auto de tus sueños. El camino comienza aquí.
+          </motion.h1>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.3 }}
           >
-            Read our docs
-          </a>
+            <Button className="bg-gray-800 hover:bg-gray-700 text-white px-8 py-6 text-lg">
+              Comprar ahora
+            </Button>
+          </motion.div>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
-  );
+      </div>
+
+      {/* Más vendidos - Similar al mockup */}
+      <section className="py-16 px-6">
+        <div className="container mx-auto">
+          <h2 className="text-3xl font-bold mb-12 text-left">Más vendidos</h2>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {featuredCars.map((car, index) => (
+              <motion.div
+                key={car.id}
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+              >
+                <ProductCard
+                  id={car.id}
+                  name={car.name}
+                  year={car.year}
+                  km={car.km}
+                  price={car.price}
+                  isBestSeller={car.isBestSeller}
+                  image={car.image}
+                />
+              </motion.div>
+            ))}
+          </div>
+
+          <div className="text-center mt-12">
+            <Link href="/tienda">
+              <Button size="lg">
+                Ver todos los vehículos <ArrowRight size={16} className="ml-2" />
+              </Button>
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Categorías destacadas */}
+      <section className="py-16 px-6 bg-gray-50">
+        <div className="container mx-auto">
+          <h2 className="text-3xl font-bold mb-12 text-left">Categorías destacadas</h2>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {/* Categorías como en tu código original pero con animaciones */}
+            {[
+              {name: "Sedán", desc: "Elegancia y confort para tu día a día"},
+              {name: "SUV", desc: "Versatilidad y espacio para toda la familia"},
+              {name: "Deportivo", desc: "Potencia y adrenalina en estado puro"},
+              {name: "Eléctrico", desc: "El futuro de la movilidad sostenible"}
+            ].map((categoria, index) => (
+              <motion.div 
+                key={categoria.name}
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                className="bg-white rounded-lg shadow-md overflow-hidden group"
+              >
+                <div className="relative h-48">
+                  <Image
+                    src={`/${categoria.name.toLowerCase()}.jpg`}
+                    alt={categoria.name}
+                    fill
+                    className="object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                </div>
+                <div className="p-4 text-center">
+                  <h3 className="text-xl font-semibold mb-2">{categoria.name}</h3>
+                  <p className="text-gray-600 mb-4">{categoria.desc}</p>
+                  <Link href={`/tienda?categoria=${categoria.name.toLowerCase()}`}>
+                    <Button variant="outline" className="w-full">
+                      Ver {categoria.name.toLowerCase()}s <ArrowRight size={16} className="ml-2" />
+                    </Button>
+                  </Link>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Por qué elegirnos */}
+      <section className="py-16 px-6">
+        <div className="container mx-auto">
+          <h2 className="text-3xl font-bold mb-12 text-left">¿Por qué elegirnos?</h2>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {/* Razón 1 */}
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              viewport={{ once: true }}
+              className="bg-white p-6 rounded-lg shadow-md text-center"
+            >
+              <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Star className="text-blue-600 h-8 w-8" />
+              </div>
+              <h3 className="text-xl font-semibold mb-2">Calidad garantizada</h3>
+              <p className="text-gray-600">
+                Todos nuestros vehículos pasan por exhaustivos controles de calidad antes de ser puestos a la venta.
+              </p>
+            </motion.div>
+
+            {/* Razón 2 */}
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+              viewport={{ once: true }}
+              className="bg-white p-6 rounded-lg shadow-md text-center"
+            >
+              <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <PenTool className="text-blue-600 h-8 w-8" />
+              </div>
+              <h3 className="text-xl font-semibold mb-2">Servicio técnico</h3>
+              <p className="text-gray-600">
+                Contamos con un equipo de profesionales especializados en el mantenimiento y reparación de vehículos.
+              </p>
+            </motion.div>
+
+            {/* Razón 3 */}
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              viewport={{ once: true }}
+              className="bg-white p-6 rounded-lg shadow-md text-center"
+            >
+              <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Car className="text-blue-600 h-8 w-8" />
+              </div>
+              <h3 className="text-xl font-semibold mb-2">Amplio catálogo</h3>
+              <p className="text-gray-600">
+                Disponemos de una gran variedad de vehículos para que encuentres el que mejor se adapta a tus
+                necesidades.
+              </p>
+            </motion.div>
+
+            {/* Razón 4 */}
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.3 }}
+              viewport={{ once: true }}
+              className="bg-white p-6 rounded-lg shadow-md text-center"
+            >
+              <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Shield className="text-blue-600 h-8 w-8" />
+              </div>
+              <h3 className="text-xl font-semibold mb-2">Garantía</h3>
+              <p className="text-gray-600">
+                Ofrecemos garantía en todos nuestros vehículos para que puedas comprar con total tranquilidad.
+              </p>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* Call to Action */}
+      <section className="py-16 px-6 bg-blue-600 text-white">
+        <div className="container mx-auto text-center">
+          <h2 className="text-3xl font-bold mb-4">¿Listo para encontrar tu próximo vehículo?</h2>
+          <p className="mb-8 max-w-2xl mx-auto">
+            En TasDrives te ayudamos a encontrar el vehículo perfecto para ti. Visita nuestra tienda o contacta con
+            nosotros.
+          </p>
+          <div className="flex flex-col sm:flex-row justify-center gap-4">
+            <Link href="/tienda">
+              <Button size="lg" variant="secondary">
+                Ver catálogo
+              </Button>
+            </Link>
+            <Link href="/contacto">
+              <Button
+                size="lg"
+                variant="outline"
+                className="bg-transparent border-white text-white hover:bg-white hover:text-blue-600"
+              >
+                Contactar
+              </Button>
+            </Link>
+          </div>
+        </div>
+      </section>
+    </>
+  )
 }
