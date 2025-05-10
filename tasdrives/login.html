@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <link rel="stylesheet" href="styles/styles2.css">
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="icon" type="image/png" href="favicon.ico">
+    <title>Iniciar Sesión - TasDrives</title>
+</head>
+<body>
+    <!-- Top WIX Studio Banner -->
+    <div class="wix-banner">
+        Creado con WIX STUDIO
+    </div>
+
+    <!-- Dark Info Bar -->
+    <div class="info-bar">
+        TasDrives empresa de compra y venta de autos. Customización tuning.
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-links">
+            <a href="index.html">Inicio</a>
+            <a href="tienda.html">Tienda</a>
+            <a href="sobre.html">Sobre</a>
+            <a href="contacto.html">Contacto</a>
+        </div>
+        
+        <div class="logo">TasDrives</div>
+        
+        <div class="nav-icons">
+            <a href="login.html" class="icon-button active">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                <span class="sr-only">Entrar</span>
+            </a>
+            <a href="#" class="icon-button" id="cart-button">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon"><circle cx="8" cy="21" r="1"></circle><circle cx="19" cy="21" r="1"></circle><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"></path></svg>
+                <span class="sr-only">Carrito</span>
+            </a>
+        </div>
+    </nav>
+
+    <div class="container" id="container">
+        <div class="form-container sign-up">
+            <form id="sign-up-form">
+                <h1>Crear Cuenta</h1>
+                <div class="social-icons">
+                    <a href="#" class="icon"><i class="fa-brands fa-google-plus-g"></i></a>
+                    <a href="#" class="icon"><i class="fa-brands fa-facebook-f"></i></a>
+                    <a href="#" class="icon"><i class="fa-brands fa-github"></i></a>
+                    <a href="#" class="icon"><i class="fa-brands fa-linkedin-in"></i></a>
+                </div>
+                <span>o usa tu correo electrónico para registrarte</span>
+                <input type="text" placeholder="Nombre" id="signup-name" required>
+                <input type="email" placeholder="Correo Electrónico" id="signup-email" required>
+                <input type="password" placeholder="Contraseña" id="signup-password" required>
+                <button type="submit">Registrarse</button>
+            </form>
+        </div>
+        <div class="form-container sign-in">
+            <form id="sign-in-form">
+                <h1>Iniciar Sesión</h1>
+                <div class="social-icons">
+                    <a href="#" class="icon"><i class="fa-brands fa-google-plus-g"></i></a>
+                    <a href="#" class="icon"><i class="fa-brands fa-facebook-f"></i></a>
+                    <a href="#" class="icon"><i class="fa-brands fa-github"></i></a>
+                    <a href="#" class="icon"><i class="fa-brands fa-linkedin-in"></i></a>
+                </div>
+                <span>o usa tu correo electrónico y contraseña</span>
+                <input type="email" placeholder="Correo Electrónico" id="signin-email" required>
+                <input type="password" placeholder="Contraseña" id="signin-password" required>
+                <a href="#">¿Olvidaste tu contraseña?</a>
+                <button type="submit">Iniciar Sesión</button>
+            </form>
+        </div>
+        <div class="toggle-container">
+            <div class="toggle">
+                <div class="toggle-panel toggle-left">
+                    <h1>¡Bienvenido de Nuevo!</h1>
+                    <p>Introduce tus datos personales para usar todas las funciones del sitio</p>
+                    <button class="hidden" id="login">Iniciar Sesión</button>
+                </div>
+                <div class="toggle-panel toggle-right">
+                    <h1>¡Hola, Amigo!</h1>
+                    <p>Regístrate con tus datos personales para usar todas las funciones del sitio</p>
+                    <button class="hidden" id="register">Registrarse</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content container">
+            <div class="footer-section">
+                <h3>TasDrives</h3>
+                <p>Empresa de compra y venta de autos. Especialistas en customización tuning.</p>
+            </div>
+            <div class="footer-section">
+                <h3>Enlaces</h3>
+                <ul class="footer-links">
+                    <li><a href="index.html">Inicio</a></li>
+                    <li><a href="tienda.html">Tienda</a></li>
+                    <li><a href="sobre.html">Sobre nosotros</a></li>
+                    <li><a href="contacto.html">Contacto</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Contacto</h3>
+                <address>
+                    <p>Calle Principal 123</p>
+                    <p>Ciudad, CP 12345</p>
+                    <p class="mt-2">Email: <a href="mailto:info@tasdrives.com">info@tasdrives.com</a></p>
+                    <p>Teléfono: (123) 456-7890</p>
+                </address>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2024 TasDrives. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <script src="scripts/sign.js"></script>
+    <script src="scripts/server.js"></script>
+</body>
+</html>
+
