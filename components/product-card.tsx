@@ -1,11 +1,11 @@
 "use client"
-
-import Image from "next/image"
+import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { useCart } from "@/hooks/use-cart"
 import { formatCurrency } from "@/utils/format"
 import { useState } from "react"
 import { ShoppingCart, Check } from "lucide-react"
+import ProductImage from "@/components/product-image"
 
 interface ProductCardProps {
   id?: number
@@ -15,6 +15,7 @@ interface ProductCardProps {
   price: number
   isBestSeller?: boolean
   image?: string
+  category?: string
 }
 
 export default function ProductCard({
@@ -24,7 +25,8 @@ export default function ProductCard({
   km,
   price,
   isBestSeller = false,
-  image = "/car-placeholder.jpg",
+  image = "/car-placeholder.png",
+  category,
 }: ProductCardProps) {
   const { addToCart } = useCart()
   const [isAdded, setIsAdded] = useState(false)
@@ -38,7 +40,7 @@ export default function ProductCard({
         year,
         km,
         price,
-        image: image || "/car-placeholder.jpg", // Asegurar que siempre haya una imagen
+        image: image || "/car-placeholder.png", // Asegurar que siempre haya una imagen
       })
 
       // Show added confirmation
@@ -48,25 +50,27 @@ export default function ProductCard({
   }
 
   return (
-    <div className="relative group transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
+    <div className="relative group transition-all duration-300 hover:shadow-lg hover:-translate-y-1 product-container">
       {isBestSeller && (
-        <div className="absolute top-2 left-2 bg-gray-800 text-white px-2 py-1 text-sm z-10 rounded">Más vendido</div>
+        <div className="absolute top-2 left-2 bg-gray-800 dark:bg-gray-700 text-white px-2 py-1 text-sm z-10 rounded">
+          Más vendido
+        </div>
       )}
       <div className="relative h-64 w-full overflow-hidden">
-        <Image
-          src={image || "/car-placeholder.jpg"}
+        <ProductImage
+          src={image || "/car-placeholder.png"}
           alt={name}
-          fill
-          className="object-cover group-hover:scale-105 transition-transform duration-300"
+          category={category}
+          className="group-hover:scale-105 transition-transform duration-300 h-full w-full"
         />
       </div>
-      <div className="p-4 border border-t-0">
-        <h3 className="text-xl font-semibold">{name}</h3>
-        <p className="text-gray-600" suppressHydrationWarning>
+      <div className="product-info">
+        <h3 className="product-name">{name}</h3>
+        <p className="product-details" suppressHydrationWarning>
           {year} • {km.toLocaleString("es-ES")} km
         </p>
         <div className="flex justify-between items-center mt-4">
-          <span className="text-xl font-bold" suppressHydrationWarning>
+          <span className="product-price" suppressHydrationWarning>
             {formatCurrency(price)}
           </span>
           <div className="flex space-x-2">
@@ -74,7 +78,11 @@ export default function ProductCard({
               variant="outline"
               size="sm"
               onClick={handleAddToCart}
-              className={isAdded ? "bg-green-50 text-green-600 border-green-200" : ""}
+              className={
+                isAdded
+                  ? "bg-green-50 text-green-600 border-green-200 dark:bg-green-900 dark:text-green-300 dark:border-green-800"
+                  : "dark:border-gray-600 dark:text-white"
+              }
             >
               {isAdded ? (
                 <>
@@ -86,9 +94,11 @@ export default function ProductCard({
                 </>
               )}
             </Button>
-            <Button variant="outline" size="sm">
-              Ver detalles
-            </Button>
+            <Link href={`/tienda/${id}`}>
+              <Button variant="outline" size="sm" className="dark:border-gray-600 dark:text-white">
+                Ver detalles
+              </Button>
+            </Link>
           </div>
         </div>
       </div>

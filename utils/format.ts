@@ -4,9 +4,9 @@
  * @returns Formatted currency string
  */
 export function formatCurrency(amount: number): string {
-  return new Intl.NumberFormat("es-ES", {
+  return new Intl.NumberFormat("es-MX", {
     style: "currency",
-    currency: "EUR",
+    currency: "MXN",
     minimumFractionDigits: 0,
     maximumFractionDigits: 0,
   }).format(amount)

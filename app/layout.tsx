@@ -1,19 +1,19 @@
 import type React from "react"
 import type { Metadata } from "next"
 import { Inter } from "next/font/google"
-import { ThemeProvider } from "@/components/theme-provider"
+import "./globals.css"
 import Navbar from "@/components/navbar"
 import Footer from "@/components/footer"
-import { CartProvider } from "@/hooks/use-cart"
+import { ThemeProvider } from "@/components/theme-provider"
+import { AuthProvider } from "@/context/AuthContext"
+import { CartProvider } from "@/hooks/use-cart" // Cambiado de @/context/CartContext a @/hooks/use-cart
 import { NotificationsProvider } from "@/context/NotificationsContext"
-import "./globals.css"
 
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "TasDrives - Compra y venta de autos",
-  description: "Empresa de compra y venta de autos. Customización tuning.",
-  generator: "v0.dev",
+  title: "TAS Drives - Venta de Autos",
+  description: "Encuentra los mejores autos usados y nuevos en TAS Drives",
 }
 
 export default function RootLayout({
@@ -22,18 +22,20 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="es">
+    <html lang="es" suppressHydrationWarning>
       <body className={inter.className}>
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
-          <CartProvider>
-            <NotificationsProvider>
-              <div className="min-h-screen flex flex-col">
-                <Navbar />
-                <main className="flex-grow">{children}</main>
-                <Footer />
-              </div>
-            </NotificationsProvider>
-          </CartProvider>
+          <AuthProvider>
+            <CartProvider>
+              <NotificationsProvider>
+                <div className="flex flex-col min-h-screen">
+                  <Navbar />
+                  <main className="flex-grow">{children}</main>
+                  <Footer />
+                </div>
+              </NotificationsProvider>
+            </CartProvider>
+          </AuthProvider>
         </ThemeProvider>
       </body>
     </html>

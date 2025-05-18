@@ -2,131 +2,59 @@
 
 import type React from "react"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { formatCurrency } from "@/utils/format"
-
-// Datos de ejemplo para los autos
-const autos = [
-  {
-    id: 1,
-    nombre: "Lamborghini",
-    marca: "Lamborghini",
-    categoria: "Deportivo",
-    anio: 2023,
-    kilometraje: 0,
-    precio: 9290000,
-    color: "Amarillo y Negro",
-    destacado: true,
-    etiqueta: "Más vendido",
-    imagen: "/productos/lamborghini/lamborghini-urus.jpg",
-  },
-  {
-    id: 2,
-    nombre: "Jeep Wrangler",
-    marca: "Jeep",
-    categoria: "SUV",
-    anio: 2023,
-    kilometraje: 5000,
-    precio: 2000000,
-    color: "Blanco",
-    destacado: false,
-    etiqueta: "",
-    imagen: "/productos/jeep-wrangler/jeep-wrangler.jpg",
-  },
-  {
-    id: 3,
-    nombre: "Lamborghini Aventador Matte",
-    marca: "Aventador S",
-    categoria: "Deportivo",
-    anio: 2021,
-    kilometraje: 15000,
-    precio: 900000,
-    color: "Gris Matte",
-    destacado: false,
-    etiqueta: "",
-    imagen: "/productos/lamborghini/Lamborghini-Aventador-Matte.jpg",
-  },
-  {
-    id: 4,
-    nombre: "Ford Mustang Shelby",
-    marca: "Ford",
-    categoria: "Deportivo",
-    anio: 2023,
-    kilometraje: 3000,
-    precio: 2500000,
-    color: "Rojo",
-    destacado: false,
-    etiqueta: "",
-    imagen: "/productos/ford/Ford-Shelby-GT500.jpg",
-  },
-  {
-    id: 5,
-    nombre: "Toyota Supra MK4",
-    marca: "A80",
-    categoria: "Supra",
-    anio: 2023,
-    kilometraje: 0,
-    precio: 1800000,
-    color: "Negro",
-    destacado: false,
-    etiqueta: "Nuevo",
-    imagen: "/productos/toyota-supra-mk4/Supra-MK4-2.jpg",
-  },
-  {
-    id: 6,
-    nombre: "Nissan GTR R35",
-    marca: "Nissan",
-    categoria: "Deportivo",
-    anio: 2021,
-    kilometraje: 8000,
-    precio: 3500000,
-    color: "Personalizado",
-    destacado: false,
-    etiqueta: "",
-    imagen: "/productos/nissan/Nissan-GTR-R35.jpg",
-  },
-  {
-    id: 7,
-    nombre: "Bugatti Veyron",
-    marca: "Bugatti",
-    categoria: "SuperDeportivo",
-    anio: 2023,
-    kilometraje: 0,
-    precio: 1950000,
-    color: "Beige",
-    destacado: false,
-    etiqueta: "",
-    imagen: "/productos/bugatti/Bugatti-Veyron.jpg",
-  },
-  {
-    id: 8,
-    nombre: "Jeep Gladiator",
-    marca: "Jeep",
-    categoria: "Pickup",
-    anio: 2022,
-    kilometraje: 12000,
-    precio: 1750000,
-    color: "Azul",
-    destacado: false,
-    etiqueta: "",
-    imagen: "/jeep-gladiator.jpg",
-  },
-]
-
-// Opciones para los filtros
-const marcas = ["Lamborghini", "Jeep", "Nissan", "Ford", "Mercedes-Benz", "Porsche", "Toyota"]
-const categorias = ["Deportivo", "SUV", "Pickup", "Sedán"]
-const anios = [2023, 2022, 2021]
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import type { Vehicle } from "@/lib/supabase"
+import { getAllVehicles, filterVehicles } from "@/lib/supabase"
 
 export default function TiendaPage() {
+  const [autos, setAutos] = useState<Vehicle[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+
   const [filtroMarca, setFiltroMarca] = useState<string[]>([])
   const [filtroCategoria, setFiltroCategoria] = useState<string[]>([])
   const [filtroAnio, setFiltroAnio] = useState<number[]>([])
+  const [selectedYear, setSelectedYear] = useState<string>("todos")
   const [precioMin, setPrecioMin] = useState<number | "">("")
   const [precioMax, setPrecioMax] = useState<number | "">("")
+  const [ordenamiento, setOrdenamiento] = useState<string>("defecto")
+
+  // Obtener datos de marcas, categorías y años de los vehículos
+  const [marcas, setMarcas] = useState<string[]>([])
+  const [categorias, setCategories] = useState<string[]>([])
+  const [anios, setAnios] = useState<number[]>([])
+
+  // Cargar vehículos directamente desde Supabase
+  useEffect(() => {
+    async function loadVehicles() {
+      try {
+        setLoading(true)
+        const vehicles = await getAllVehicles()
+        setAutos(vehicles)
+
+        // Extraer marcas, categorías y años únicos
+        const uniqueMarcas = Array.from(new Set(vehicles.map((auto: Vehicle) => auto.marca)))
+        const uniqueCategories = Array.from(new Set(vehicles.map((auto: Vehicle) => auto.categoria)))
+        const uniqueYears = Array.from(new Set(vehicles.map((auto: Vehicle) => auto.anio))).sort((a, b) => b - a)
+
+        setMarcas(uniqueMarcas as string[])
+        setCategories(uniqueCategories as string[])
+        setAnios(uniqueYears as number[])
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "Error desconocido")
+        console.error("Error loading vehicles:", err)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    loadVehicles()
+  }, [])
 
   // Función para manejar los cambios en los filtros de checkbox
   const handleCheckboxChange = (
@@ -142,46 +70,105 @@ export default function TiendaPage() {
     }
   }
 
+  // Función para manejar el cambio de año en el menú desplegable
+  const handleYearChange = (year: string) => {
+    setSelectedYear(year)
+    if (year === "todos") {
+      setFiltroAnio([])
+    } else {
+      setFiltroAnio([Number.parseInt(year)])
+    }
+  }
+
+  // Función para manejar el cambio de ordenamiento
+  const handleOrdenamientoChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setOrdenamiento(e.target.value)
+  }
+
   // Función para resetear todos los filtros
   const resetFiltros = () => {
     setFiltroMarca([])
     setFiltroCategoria([])
     setFiltroAnio([])
+    setSelectedYear("todos")
     setPrecioMin("")
     setPrecioMax("")
+    setOrdenamiento("defecto")
   }
 
-  // Filtrar los autos según los criterios seleccionados
-  const autosFiltrados = autos.filter((auto) => {
-    // Filtro por marca
-    if (filtroMarca.length > 0 && !filtroMarca.includes(auto.marca)) return false
+  // Aplicar filtros en el cliente
+  const aplicarFiltros = async () => {
+    try {
+      setLoading(true)
 
-    // Filtro por categoría
-    if (filtroCategoria.length > 0 && !filtroCategoria.includes(auto.categoria)) return false
+      // Crear objeto de filtros
+      const filters: {
+        marca?: string[]
+        categoria?: string[]
+        anio?: number[]
+        precioMin?: number
+        precioMax?: number
+      } = {}
 
-    // Filtro por año
-    if (filtroAnio.length > 0 && !filtroAnio.includes(auto.anio)) return false
+      if (filtroMarca.length > 0) filters.marca = filtroMarca
+      if (filtroCategoria.length > 0) filters.categoria = filtroCategoria
+      if (filtroAnio.length > 0) filters.anio = filtroAnio
+      if (precioMin !== "") filters.precioMin = Number(precioMin)
+      if (precioMax !== "") filters.precioMax = Number(precioMax)
 
-    // Filtro por precio mínimo
-    if (precioMin !== "" && auto.precio < precioMin) return false
+      // Obtener vehículos filtrados
+      const filteredVehicles = await filterVehicles(filters)
+      setAutos(filteredVehicles)
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Error al aplicar filtros")
+      console.error("Error applying filters:", err)
+    } finally {
+      setLoading(false)
+    }
+  }
 
-    // Filtro por precio máximo
-    if (precioMax !== "" && auto.precio > precioMax) return false
+  // Ordenar los autos según el criterio seleccionado
+  let autosFiltrados = [...autos]
+  if (ordenamiento === "precio-asc") {
+    autosFiltrados = autosFiltrados.sort((a, b) => a.precio - b.precio)
+  } else if (ordenamiento === "precio-desc") {
+    autosFiltrados = autosFiltrados.sort((a, b) => b.precio - a.precio)
+  } else if (ordenamiento === "recientes") {
+    autosFiltrados = autosFiltrados.sort((a, b) => b.anio - a.anio)
+  }
 
-    return true
-  })
+  if (loading) {
+    return (
+      <div className="container mx-auto py-8 px-4 text-center">
+        <h1 className="text-3xl font-bold mb-8">Cargando vehículos...</h1>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-800 dark:border-white mx-auto"></div>
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div className="container mx-auto py-8 px-4 text-center">
+        <h1 className="text-3xl font-bold mb-8">Error</h1>
+        <p className="text-red-500">{error}</p>
+        <Button onClick={() => window.location.reload()} className="mt-4">
+          Intentar de nuevo
+        </Button>
+      </div>
+    )
+  }
 
   return (
     <div className="container mx-auto py-8 px-4">
-      <h1 className="text-3xl font-bold mb-8 text-center">Nuestros Autos</h1>
+      <h1 className="text-3xl font-bold mb-8 text-center text-gray-900 dark:text-white">Nuestros Autos</h1>
 
       <div className="flex flex-col lg:flex-row gap-8">
         {/* Sidebar de filtros */}
-        <div className="lg:w-1/4 bg-white p-6 rounded-lg shadow-md h-fit">
-          <h2 className="text-xl font-semibold mb-4">Filtros</h2>
+        <div className="lg:w-1/4 sidebar-filters">
+          <h2 className="text-xl filter-title mb-4">Filtros</h2>
 
           <div className="mb-6">
-            <h3 className="font-medium mb-2">Marca</h3>
+            <h3 className="filter-title mb-2">Marca</h3>
             <div className="space-y-2">
               {marcas.map((marca) => (
                 <div key={marca} className="flex items-center">
@@ -192,14 +179,16 @@ export default function TiendaPage() {
                     onChange={(e) => handleCheckboxChange(marca, e.target.checked, filtroMarca, setFiltroMarca)}
                     className="mr-2"
                   />
-                  <label htmlFor={`marca-${marca}`}>{marca}</label>
+                  <label htmlFor={`marca-${marca}`} className="filter-option">
+                    {marca}
+                  </label>
                 </div>
               ))}
             </div>
           </div>
 
           <div className="mb-6">
-            <h3 className="font-medium mb-2">Categoría</h3>
+            <h3 className="filter-title mb-2">Categoría</h3>
             <div className="space-y-2">
               {categorias.map((categoria) => (
                 <div key={categoria} className="flex items-center">
@@ -212,84 +201,94 @@ export default function TiendaPage() {
                     }
                     className="mr-2"
                   />
-                  <label htmlFor={`categoria-${categoria}`}>{categoria}</label>
+                  <label htmlFor={`categoria-${categoria}`} className="filter-option">
+                    {categoria}
+                  </label>
                 </div>
               ))}
             </div>
           </div>
 
           <div className="mb-6">
-            <h3 className="font-medium mb-2">Año</h3>
-            <div className="space-y-2">
-              {anios.map((anio) => (
-                <div key={anio} className="flex items-center">
-                  <input
-                    type="checkbox"
-                    id={`anio-${anio}`}
-                    checked={filtroAnio.includes(anio)}
-                    onChange={(e) => handleCheckboxChange(anio, e.target.checked, filtroAnio, setFiltroAnio)}
-                    className="mr-2"
-                  />
-                  <label htmlFor={`anio-${anio}`}>{anio}</label>
-                </div>
-              ))}
-            </div>
+            <h3 className="filter-title mb-2">Año</h3>
+            <Select value={selectedYear} onValueChange={handleYearChange}>
+              <SelectTrigger className="w-full dark:bg-gray-700 dark:text-white dark:border-gray-600">
+                <SelectValue placeholder="Seleccionar año" />
+              </SelectTrigger>
+              <SelectContent className="dark:bg-gray-800 dark:text-white dark:border-gray-700">
+                <SelectItem value="todos">Todos los años</SelectItem>
+                {anios.map((anio) => (
+                  <SelectItem key={anio} value={anio.toString()}>
+                    {anio}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
 
           <div className="mb-6">
-            <h3 className="font-medium mb-2">Precio</h3>
+            <h3 className="filter-title mb-2">Precio</h3>
             <div className="space-y-3">
               <div>
-                <label htmlFor="precio-min" className="block text-sm mb-1">
-                  Mínimo (€)
+                <label htmlFor="precio-min" className="block text-sm mb-1 filter-option">
+                  Mínimo (MXN)
                 </label>
                 <input
                   type="number"
                   id="precio-min"
                   value={precioMin}
                   onChange={(e) => setPrecioMin(e.target.value ? Number(e.target.value) : "")}
-                  className="w-full p-2 border rounded"
+                  className="w-full p-2 border rounded dark:bg-gray-700 dark:text-white dark:border-gray-600"
                   min="0"
                 />
               </div>
               <div>
-                <label htmlFor="precio-max" className="block text-sm mb-1">
-                  Máximo (€)
+                <label htmlFor="precio-max" className="block text-sm mb-1 filter-option">
+                  Máximo (MXN)
                 </label>
                 <input
                   type="number"
                   id="precio-max"
                   value={precioMax}
                   onChange={(e) => setPrecioMax(e.target.value ? Number(e.target.value) : "")}
-                  className="w-full p-2 border rounded"
+                  className="w-full p-2 border rounded dark:bg-gray-700 dark:text-white dark:border-gray-600"
                   min="0"
                 />
               </div>
             </div>
           </div>
 
-          <Button onClick={resetFiltros} variant="outline" className="w-full">
-            Resetear filtros
-          </Button>
+          <div className="space-y-3">
+            <Button onClick={aplicarFiltros} className="w-full bg-red-500 hover:bg-red-600">
+              Aplicar filtros
+            </Button>
+            <Button onClick={resetFiltros} variant="outline" className="w-full dark:border-gray-600 dark:text-white">
+              Resetear filtros
+            </Button>
+          </div>
         </div>
 
         {/* Grid de productos */}
         <div className="lg:w-3/4">
           <div className="mb-4 flex justify-between items-center">
-            <p className="text-gray-600">
+            <p className="results-count">
               Mostrando {autosFiltrados.length} de {autos.length} resultados
             </p>
-            <select className="p-2 border rounded">
-              <option>Ordenar por defecto</option>
-              <option>Precio: menor a mayor</option>
-              <option>Precio: mayor a menor</option>
-              <option>Más recientes</option>
+            <select
+              className="p-2 border rounded dark:bg-gray-700 dark:text-white dark:border-gray-600"
+              value={ordenamiento}
+              onChange={handleOrdenamientoChange}
+            >
+              <option value="defecto">Ordenar por defecto</option>
+              <option value="precio-asc">Precio: menor a mayor</option>
+              <option value="precio-desc">Precio: mayor a menor</option>
+              <option value="recientes">Más recientes</option>
             </select>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {autosFiltrados.map((auto) => (
-              <div key={auto.id} className="relative group">
+              <div key={auto.id} className="relative group product-container">
                 <Link href={`/tienda/${auto.id}`}>
                   <div className="relative h-64 w-full overflow-hidden">
                     <Image
@@ -299,14 +298,14 @@ export default function TiendaPage() {
                       className="object-cover"
                     />
                     {auto.etiqueta && (
-                      <div className="absolute top-2 left-2 bg-gray-800 text-white px-2 py-1 text-sm z-10">
+                      <div className="absolute top-2 left-2 bg-gray-800 text-white px-2 py-1 text-sm z-10 rounded">
                         {auto.etiqueta}
                       </div>
                     )}
                   </div>
-                  <div className="p-3 bg-white">
-                    <h3 className="text-lg font-medium">{auto.nombre}</h3>
-                    <p className="text-2xl font-bold mt-1">{formatCurrency(auto.precio)}</p>
+                  <div className="product-info">
+                    <h3 className="product-name">{auto.nombre}</h3>
+                    <p className="product-price">{formatCurrency(auto.precio)}</p>
                   </div>
                 </Link>
               </div>
@@ -315,7 +314,7 @@ export default function TiendaPage() {
 
           {autosFiltrados.length === 0 && (
             <div className="text-center py-12">
-              <p className="text-gray-500 text-lg">
+              <p className="text-gray-500 dark:text-gray-400 text-lg">
                 No se encontraron autos que coincidan con los filtros seleccionados.
               </p>
               <Button onClick={resetFiltros} className="mt-4">

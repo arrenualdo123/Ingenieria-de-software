@@ -5,89 +5,86 @@ import Link from "next/link"
 export default function SobreNosotrosPage() {
   return (
     <div className="container mx-auto py-12 px-4">
-      <h1 className="text-4xl font-bold mb-8 text-center">Sobre Nosotros</h1>
-      
+      <h1 className="text-4xl font-bold mb-8 text-center dark:text-white">Sobre Nosotros</h1>
+
       <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center mb-16">
         <div>
-          <h2 className="text-2xl font-semibold mb-4">Nuestra Historia</h2>
-          <p className="text-gray-600 mb-4">
-            TasDrives nació en 2010 con una visión clara: revolucionar la forma en que las personas compran y venden automóviles. 
-            Fundada por un grupo de entusiastas del motor, nuestra empresa ha crecido hasta convertirse en un referente en el sector.
+          <h2 className="text-2xl font-semibold mb-4 dark:text-white">Nuestra Historia</h2>
+          <p className="text-gray-600 mb-4 dark:text-gray-300">
+            TasDrives nació en 2025 con una visión clara: revolucionar la forma en que las personas compran y venden
+            automóviles. Fundada por un grupo de entusiastas del motor, nuestra empresa ha crecido hasta convertirse en
+            un referente en el sector.
           </p>
-          <p className="text-gray-600 mb-4">
-            Con más de una década de experiencia, hemos ayudado a miles de clientes a encontrar el vehículo perfecto para sus necesidades, 
-            ofreciendo siempre un servicio personalizado y de calidad.
+          <p className="text-gray-600 mb-4 dark:text-gray-300">
+            Con más de una década de experiencia, hemos ayudado a miles de clientes a encontrar el vehículo perfecto
+            para sus necesidades, ofreciendo siempre un servicio personalizado y de calidad.
           </p>
         </div>
         <div className="relative h-[400px] rounded-lg overflow-hidden">
-          <Image 
-            src="/about-image.jpg" 
-            alt="Equipo de TasDrives" 
-            fill 
-            className="object-cover"
-            priority
-          />
+          <Image src="/logo1.jpg" alt="Nuestro equipo trabajando" fill className="object-cover" />
         </div>
       </div>
-      
-      <div className="bg-gray-50 p-8 rounded-lg mb-16">
-        <h2 className="text-2xl font-semibold mb-6 text-center">Nuestros Valores</h2>
+
+      <div className="bg-gray-100 dark:bg-gray-800 rounded-lg p-8 mb-16">
+        <h2 className="text-2xl font-semibold mb-6 text-center dark:text-white">Nuestros Valores</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          <div className="bg-white p-6 rounded-lg shadow-sm">
-            <h3 className="text-xl font-medium mb-3">Calidad</h3>
-            <p className="text-gray-600">
-              Todos nuestros vehículos pasan por exhaustivos controles de calidad antes de ser puestos a la venta, 
-              garantizando así su perfecto estado y funcionamiento.
+          <div className="bg-white dark:bg-gray-700 p-6 rounded-lg shadow-md">
+            <h3 className="text-xl font-semibold mb-3 dark:text-white">Transparencia</h3>
+            <p className="text-gray-600 dark:text-gray-300">
+              Creemos en la honestidad y la claridad en cada transacción. Sin sorpresas, sin letra pequeña.
             </p>
           </div>
-          <div className="bg-white p-6 rounded-lg shadow-sm">
-            <h3 className="text-xl font-medium mb-3">Transparencia</h3>
-            <p className="text-gray-600">
-              Creemos en la honestidad y la transparencia en todas nuestras operaciones. 
-              Proporcionamos información detallada sobre cada vehículo y su historial.
+          <div className="bg-white dark:bg-gray-700 p-6 rounded-lg shadow-md">
+            <h3 className="text-xl font-semibold mb-3 dark:text-white">Calidad</h3>
+            <p className="text-gray-600 dark:text-gray-300">
+              Todos nuestros vehículos pasan por rigurosos controles de calidad antes de llegar a nuestros clientes.
             </p>
           </div>
-          <div className="bg-white p-6 rounded-lg shadow-sm">
-            <h3 className="text-xl font-medium mb-3">Servicio al Cliente</h3>
-            <p className="text-gray-600">
-              Nuestro equipo está comprometido a ofrecer un servicio excepcional, 
-              asesorando a nuestros clientes durante todo el proceso de compra.
+          <div className="bg-white dark:bg-gray-700 p-6 rounded-lg shadow-md">
+            <h3 className="text-xl font-semibold mb-3 dark:text-white">Servicio</h3>
+            <p className="text-gray-600 dark:text-gray-300">
+              Nuestro compromiso con el cliente va más allá de la venta. Estamos aquí para ayudarte en todo el proceso.
             </p>
           </div>
         </div>
       </div>
-      
-      <div className="mb-16">
-        <h2 className="text-2xl font-semibold mb-6 text-center">Nuestro Equipo</h2>
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-          {[1, 2, 3, 4].map((member) => (
-            <div key={member} className="text-center">
-              <div className="relative h-64 w-64 mx-auto rounded-full overflow-hidden mb-4">
-                <Image 
-                  src={`/team-member-${member}.jpg`} 
-                  alt={`Miembro del equipo ${member}`} 
-                  fill 
-                  className="object-cover"
-                />
-              </div>
-              <h3 className="text-xl font-medium">Nombre Apellido</h3>
-              <p className="text-gray-600">Cargo en la empresa</p>
+
+      <div className="text-center mb-16">
+        <h2 className="text-2xl font-semibold mb-6 dark:text-white">Nuestro Equipo</h2>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="flex flex-col items-center">
+            <div className="relative w-64 h-64 mb-4 rounded-full overflow-hidden border-4 border-gray-200 dark:border-gray-700">
+              <Image src="/tony.jpg" alt="Miembro del equipo" fill className="object-cover object-center" />
             </div>
-          ))}
+            <h3 className="text-xl font-semibold dark:text-white">Antonio Gonzalez</h3>
+            <p className="text-gray-600 dark:text-gray-300">Director General</p>
+          </div>
+          <div className="flex flex-col items-center">
+            <div className="relative w-64 h-64 mb-4 rounded-full overflow-hidden border-4 border-gray-200 dark:border-gray-700">
+              <Image src="/angel.jpg" alt="Miembro del equipo" fill className="object-cover object-center" />
+            </div>
+            <h3 className="text-xl font-semibold dark:text-white">Angel Mayo</h3>
+            <p className="text-gray-600 dark:text-gray-300">Directora de Ventas</p>
+          </div>
+          <div className="flex flex-col items-center">
+            <div className="relative w-64 h-64 mb-4 rounded-full overflow-hidden border-4 border-gray-200 dark:border-gray-700">
+              <Image src="/jese.jpg" alt="Miembro del equipo" fill className="object-cover object-center" />
+            </div>
+            <h3 className="text-xl font-semibold dark:text-white">Jese Arreola</h3>
+            <p className="text-gray-600 dark:text-gray-300">Jefe de Taller</p>
+          </div>
         </div>
       </div>
-      
-      <div className="bg-blue-600 text-white p-12 rounded-lg text-center">
-        <h2 className="text-3xl font-bold mb-4">¿Quieres formar parte de nuestro equipo?</h2>
-        <p className="mb-8 max-w-2xl mx-auto">
-          Estamos siempre en búsqueda de talento para unirse a nuestra familia. Si te apasionan los automóviles y quieres 
-          desarrollar tu carrera profesional en un entorno dinámico, ¡queremos conocerte!
+
+      <div className="text-center">
+        <h2 className="text-2xl font-semibold mb-6 dark:text-white">¿Quieres formar parte de nuestra historia?</h2>
+        <p className="text-gray-600 mb-8 max-w-2xl mx-auto dark:text-gray-300">
+          Si estás buscando tu próximo vehículo o quieres vender el tuyo, no dudes en contactar con nosotros. Estaremos
+          encantados de ayudarte a encontrar la mejor solución para ti.
         </p>
-        <Link href="/contacto">
-          <Button size="lg" variant="outline" className="bg-transparent border-white text-white hover:bg-white hover:text-blue-600">
-            Contáctanos
-          </Button>
-        </Link>
+        <Button asChild size="lg">
+          <Link href="/contacto">Contacta con nosotros</Link>
+        </Button>
       </div>
     </div>
   )

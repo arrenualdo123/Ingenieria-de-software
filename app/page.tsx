@@ -5,7 +5,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import ProductCard from "@/components/product-card"
-import { ArrowRight, Star, PenTool, Car, Shield } from 'lucide-react'
+import { ArrowRight, Star, PenTool, Car, Shield } from "lucide-react"
 import { motion } from "framer-motion"
 
 export default function Home() {
@@ -13,31 +13,31 @@ export default function Home() {
 
   const featuredCars = [
     {
-      id: 1,
-      name: "BMW Serie 3",
-      year: 2023,
-      km: 15000,
-      price: 45000,
+      id: 9,
+      name: "Ford GT 67",
+      year: 2017,
+      km: 1250,
+      price: 450000,
       isBestSeller: true,
-      image: "/bmw-serie3.jpg"
+      image: "/productos/ford/ford-gt-67-heritage.jpg",
     },
     {
-      id: 2,
-      name: "Mercedes-Benz Clase C",
-      year: 2022,
+      id: 10,
+      name: "Nissan Z GT4",
+      year: 2024,
       km: 20000,
-      price: 52000,
+      price: 520000,
       isBestSeller: false,
-      image: "/mercedes-clasec.jpg"
+      image: "/productos/nissan/nissan-z-gt4.jpg",
     },
     {
-      id: 3,
-      name: "Audi A4",
-      year: 2023,
+      id: 11,
+      name: "Camaro Strode",
+      year: 2022,
       km: 10000,
       price: 48500,
       isBestSeller: false,
-      image: "/audi-a4.jpg"
+      image: "/productos/camaro/camaro-strode.jpg",
     },
   ]
 
@@ -56,15 +56,9 @@ export default function Home() {
     <>
       {/* Hero Section - Pantalla completa como en el mockup */}
       <div className="relative h-screen w-full overflow-hidden">
-        <Image 
-          src="/hero-car.jpg" 
-          alt="BMW negro" 
-          fill 
-          className="object-cover" 
-          priority 
-        />
+        <Image src="/hero-car.jpg" alt="BMW negro" fill className="object-cover" priority />
         <div className="absolute inset-0 bg-gradient-to-b from-black/30 to-black/50 flex flex-col items-center justify-center text-center px-4">
-          <motion.h1 
+          <motion.h1
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
@@ -77,9 +71,9 @@ export default function Home() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.3 }}
           >
-            <Button className="bg-gray-800 hover:bg-gray-700 text-white px-8 py-6 text-lg">
-              Comprar ahora
-            </Button>
+            <Link href="/tienda">
+              <Button className="bg-gray-800 hover:bg-gray-700 text-white px-8 py-6 text-lg">Comenzar ahora</Button>
+            </Link>
           </motion.div>
         </div>
       </div>
@@ -128,12 +122,12 @@ export default function Home() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {/* Categorías como en tu código original pero con animaciones */}
             {[
-              {name: "Sedán", desc: "Elegancia y confort para tu día a día"},
-              {name: "SUV", desc: "Versatilidad y espacio para toda la familia"},
-              {name: "Deportivo", desc: "Potencia y adrenalina en estado puro"},
-              {name: "Eléctrico", desc: "El futuro de la movilidad sostenible"}
+              { name: "Sedán", desc: "Elegancia y confort para tu día a día" },
+              { name: "SUV", desc: "Versatilidad y espacio para toda la familia" },
+              { name: "Deportivo", desc: "Potencia y adrenalina en estado puro" },
+              { name: "Eléctrico", desc: "El futuro de la movilidad sostenible" },
             ].map((categoria, index) => (
-              <motion.div 
+              <motion.div
                 key={categoria.name}
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
@@ -170,7 +164,7 @@ export default function Home() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {/* Razón 1 */}
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
@@ -187,7 +181,7 @@ export default function Home() {
             </motion.div>
 
             {/* Razón 2 */}
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.1 }}
@@ -204,7 +198,7 @@ export default function Home() {
             </motion.div>
 
             {/* Razón 3 */}
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.2 }}
@@ -222,7 +216,7 @@ export default function Home() {
             </motion.div>
 
             {/* Razón 4 */}
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.3 }}
